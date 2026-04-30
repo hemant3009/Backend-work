@@ -53,10 +53,10 @@ const userSchema = new Schema(
 
 //this pre hook is used to perform some action just before saving the data
 userSchema.pre("save", async function (next) {
-    if(!this.isModified("password")) return next();
+    if(!this.isModified("password")) return ;
 
     this.password = await bcrypt.hash(this.password, 10)
-    next()
+    // next()
 })
 
 userSchema.methods.isPasswordCorrect = async function(password){
