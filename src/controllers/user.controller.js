@@ -4,7 +4,7 @@ import {User} from "../models/user.model.js"
 import { deleteFromCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken"
-import { use } from "react";
+// import { use } from "react";
 import mongoose from "mongoose";
 
 const generateAccessAndRefreshTokens = async(userId) => {
@@ -207,7 +207,7 @@ const refreshAccessToken = asyncHandler(async(req,res) =>{
         )
     
         // now get the original Id of user from database 
-        const user = User.findById(decodedToken?._id)
+        const user = await User.findById(decodedToken?._id)
     
         if(!user){
             throw new ApiError(401, "Invalid refresh token")
@@ -371,7 +371,7 @@ const getUserChannelProfile = asyncHandler(async(req, res) => {
             // first pipeline where we are finding subs
             $lookup: {
                 from: "subscriptions",
-                localFields: "_id",
+                localField: "_id",
                 foreignField: "channel",
                 as: "subscribers"
             }
@@ -380,7 +380,7 @@ const getUserChannelProfile = asyncHandler(async(req, res) => {
             // for getting the channel
             $lookup: {
                 from: "subscriptions",
-                localFields: "_id",
+                localField: "_id",
                 foreignField: "subscriber",
                 as: "subscribedTo"
             }
@@ -494,4 +494,4 @@ export {
     updateUserCoverImage,
     getUserChannelProfile,
     getWatchHistory
-}
+} 
